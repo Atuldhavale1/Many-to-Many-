@@ -21,21 +21,34 @@ public class AdminController {
     private CourseRepository courseRepo;
 
     @PostMapping("/assign-course-to-student")
+//    public String addCourseToStudent(@RequestParam int rollNo, @RequestParam int courseId) {
+//
+//        Student student = studentRepo.findById(rollNo).orElseThrow(()->new RuntimeException("Student Not found"));
+//
+//        Course course = courseRepo.findById(courseId).orElseThrow(()->new RuntimeException("Student Not found"));
+//        List<Course> courses = student.getCourses();
+//
+//        if(courses == null){
+//            courses = new ArrayList<>();
+//        }
+//        courses.add(course);
+//
+//        student.setCourses(courses);
+//
+//        studentRepo.save(student);
+//
+//        return "Course added successfully";
+//
+//    }
+
     public String addCourseToStudent(@RequestParam int rollNo, @RequestParam int courseId) {
 
         Student student = studentRepo.findById(rollNo).orElseThrow(()->new RuntimeException("Student Not found"));
 
         Course course = courseRepo.findById(courseId).orElseThrow(()->new RuntimeException("Student Not found"));
-        List<Course> courses = student.getCourses();
-
-        if(courses == null){
-            courses = new ArrayList<>();
-        }
-        courses.add(course);
-
-        student.setCourses(courses);
-
-        studentRepo.save(student);
+        student.addCourse(course);  // This will add the course and maintain bidirectional association
+//        course.addStudent(student);
+        studentRepo.save(student);  // Save the student, and both sides of the relationship should be persisted
 
         return "Course added successfully";
 
